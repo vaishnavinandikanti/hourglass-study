@@ -1,0 +1,61 @@
+:root {
+  /* Color tokens — "dusk study room" palette */
+  --ink: #14121f;
+  --ink-2: #1c1930;
+  --surface: #211d38;
+  --surface-2: #29234480;
+  --paper: #f2efe9;
+  --paper-muted: #9c97ae;
+  --brass: #d8a657;
+  --brass-soft: #e8c98a;
+  --ember: #e2725b;
+  --sage: #8fae8b;
+
+  --font-display: 'Fraunces', 'Georgia', serif;
+  --font-body: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'Spline Sans Mono', 'SF Mono', monospace;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--ink);
+  color: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--brass);
+  color: var(--ink);
+}
+
+/* Visible keyboard focus, kept quiet but present */
+:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

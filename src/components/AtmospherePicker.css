@@ -1,0 +1,43 @@
+.atmo-picker {
+  display: flex;
+  gap: 8px;
+}
+
+.atmo-picker__swatch {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  position: relative;
+  transition: transform 0.15s ease, border-color 0.2s ease;
+}
+
+.atmo-picker__swatch:hover { transform: scale(1.12); }
+
+.atmo-picker__swatch--active {
+  border-color: var(--paper);
+}
+
+.atmo-picker__swatch--ember { background: linear-gradient(135deg, #d8a657, #e2725b); }
+.atmo-picker__swatch--aurora { background: linear-gradient(135deg, #4fd3a4, #7a63e0); }
+.atmo-picker__swatch--tide { background: linear-gradient(135deg, #2f8f9e, #0e2a3a); }
+.atmo-picker__swatch--grove { background: linear-gradient(135deg, #e8c98a, #3f6b4a); }
+.atmo-picker__swatch--midnight { background: linear-gradient(135deg, #3a3a6b, #08070f); }
+
+.atmo-picker__label {
+  position: absolute;
+  top: 34px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  white-space: nowrap;
+  color: var(--paper-muted);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.atmo-picker__swatch:hover .atmo-picker__label,
+.atmo-picker__swatch--active .atmo-picker__label {
+  opacity: 1;
+}
