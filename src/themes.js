@@ -4,35 +4,35 @@ export const AESTHETIC_THEMES = [
     id: 'ember',
     label: 'Ember',
     type: 'gradient',
-    spotifyPlaylistId: '37i9dQZF1DWXRwVJmlkKqJ',
+    spotifyPlaylistId: '37i9dQZF1DWXRwVJmlkKqJ', // Lofi Café
   },
   {
     id: 'aurora',
     label: 'Aurora',
     type: 'gradient',
-    spotifyPlaylistId: '37i9dQZF1DWZeKCadgRdKQ',
+    spotifyPlaylistId: '37i9dQZF1DWZeKCadgRdKQ', // Deep Focus
   },
   {
     id: 'tide',
     label: 'Tide',
     type: 'gradient',
-    spotifyPlaylistId: '37i9dQZF1DX4sWSpwq3LiO',
+    spotifyPlaylistId: '37i9dQZF1DX4sWSpwq3LiO', // Peaceful Piano
   },
   {
     id: 'grove',
     label: 'Grove',
     type: 'gradient',
-    spotifyPlaylistId: '37i9dQZF1DWYeKT834DGNC',
+    spotifyPlaylistId: '37i9dQZF1DWYeKT834DGNC', // Forest & Nature
   },
   {
     id: 'midnight',
     label: 'Midnight',
     type: 'gradient',
-    spotifyPlaylistId: '37i9dQZF1DWZAqNoBGZDYN',
+    spotifyPlaylistId: '37i9dQZF1DWZAqNoBGZDYN', // Study Lofi
   },
 ]
 
-// Video themes WITHOUT Spotify
+// Video themes WITH Spotify playlists
 export const VIDEO_THEMES = [
   {
     id: 'cafe',
@@ -42,6 +42,7 @@ export const VIDEO_THEMES = [
       { id: 1, url: 'https://youtu.be/sYwC7lhccis' },
       { id: 2, url: 'https://youtu.be/lj3WRojfdLs' },
     ],
+    spotifyPlaylistId: '37i9dQZF1DWXRwVJmlkKqJ', // Lofi Café
   },
   {
     id: 'train',
@@ -51,6 +52,7 @@ export const VIDEO_THEMES = [
       { id: 1, url: 'https://youtu.be/q8nPaqfRm_c' },
       { id: 2, url: 'https://youtu.be/dQFTPqTKePw' },
     ],
+    spotifyPlaylistId: '37i9dQZF1DXcZQhOHkzX08', // Travel & Adventure
   },
   {
     id: 'tokyo',
@@ -60,6 +62,7 @@ export const VIDEO_THEMES = [
       { id: 1, url: 'https://youtu.be/-Xh4BNbxpI8' },
       { id: 2, url: 'https://youtu.be/Kw6rby5SZ7w' },
     ],
+    spotifyPlaylistId: '37i9dQZF1DX9PCZHTxVFsK', // Tokyo Lofi
   },
   {
     id: 'forest',
@@ -69,6 +72,7 @@ export const VIDEO_THEMES = [
       { id: 1, url: 'https://youtu.be/29XymHesxa0' },
       { id: 2, url: 'https://youtu.be/lP4wSXSH9nM' },
     ],
+    spotifyPlaylistId: '37i9dQZF1DWYeKT834DGNC', // Forest & Nature
   },
   {
     id: 'rain',
@@ -78,6 +82,7 @@ export const VIDEO_THEMES = [
       { id: 1, url: 'https://youtu.be/J4d-a7dVtiQ' },
       { id: 2, url: 'https://youtu.be/IUfA_J4eES0' },
     ],
+    spotifyPlaylistId: '37i9dQZF1DX4sWSpwq3LiO', // Peaceful Piano & Rain
   },
   {
     id: 'fireplace',
@@ -86,6 +91,7 @@ export const VIDEO_THEMES = [
     videos: [
       { id: 1, url: 'https://youtu.be/hEaIebMtRZc' },
     ],
+    spotifyPlaylistId: '37i9dQZF1DWSJHnPUd5VrJ', // Cozy Fireplace
   },
   {
     id: 'bookshelf',
@@ -94,6 +100,7 @@ export const VIDEO_THEMES = [
     videos: [
       { id: 1, url: 'https://youtu.be/hTLa16ZwgX0' },
     ],
+    spotifyPlaylistId: '37i9dQZF1DWZAqNoBGZDYN', // Study Lofi
   },
 ]
 
@@ -102,6 +109,5 @@ export const ALL_THEMES = [...AESTHETIC_THEMES, ...VIDEO_THEMES]
 export function getYouTubeEmbedUrl(url, isMuted = false) {
   const videoId = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([^&\n?#]+)/)?.[1]
   if (!videoId) return null
-  // mute=0 allows sound to play, mute=1 silences it
   return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&modestbranding=1&loop=1&playlist=${videoId}&mute=${isMuted ? 1 : 0}`
 }
