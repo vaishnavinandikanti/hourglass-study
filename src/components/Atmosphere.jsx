@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { THEMES, getYouTubeEmbedUrl } from "../themes.js"'  // ← ONE dot
+import { THEMES, getYouTubeEmbedUrl } from "../themes.js"
 import './Atmosphere.css'
 
 export default function Atmosphere({ themeId, onThemeChange, onVideoChange, selectedVideo, isMuted, onMuteToggle }) {
