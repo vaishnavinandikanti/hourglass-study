@@ -87,6 +87,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+  z-index: 0;
 }
 
 .atmosphere__video {
@@ -108,16 +109,17 @@
   pointer-events: none;
 }
 
-/* Controls */
+/* Controls - MUST BE CLICKABLE */
 .atmosphere__controls {
   position: fixed;
   bottom: 20px;
   left: 20px;
-  z-index: 15;
+  z-index: 100;
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
   align-items: center;
+  pointer-events: auto;
 }
 
 /* Aesthetic Theme Swatches */
@@ -130,6 +132,7 @@
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  pointer-events: auto;
 }
 
 .atmosphere__aesthetic-btn {
@@ -140,6 +143,8 @@
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
+  padding: 0;
 }
 
 .atmosphere__aesthetic-btn:hover { transform: scale(1.15); }
@@ -167,6 +172,7 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
   flex-wrap: wrap;
   max-width: 600px;
+  pointer-events: auto;
 }
 
 .atmosphere__video-theme-btn {
@@ -182,6 +188,7 @@
   font-weight: 500;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
 }
 
 .atmosphere__video-theme-btn:hover {
@@ -209,6 +216,7 @@
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  pointer-events: auto;
 }
 
 .atmosphere__video-btn {
@@ -223,6 +231,7 @@
   min-width: 32px;
   font-weight: 500;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
 }
 
 .atmosphere__video-btn:hover {
@@ -255,6 +264,8 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+  padding: 0;
 }
 
 .atmosphere__mute-btn:hover {
