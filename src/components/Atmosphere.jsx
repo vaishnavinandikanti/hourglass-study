@@ -1,37 +1,64 @@
 import React, { useState } from 'react'
-import { THEMES, getYouTubeEmbedUrl } from "../themes.js"
+import { AESTHETIC_THEMES, VIDEO_THEMES, ALL_THEMES, getYouTubeEmbedUrl } from '../themes.js'
 import './Atmosphere.css'
 
 export default function Atmosphere({ themeId, onThemeChange, onVideoChange, selectedVideo, isMuted, onMuteToggle }) {
-  const theme = THEMES.find((t) => t.id === themeId)
+  const theme = ALL_THEMES.find((t) => t.id === themeId)
   
   if (!theme) return null
 
-  const currentVideo = theme.videos.find((v) => v.id === selectedVideo) || theme.videos[0]
-  const embedUrl = getYouTubeEmbedUrl(currentVideo.url)
+  const isVideoTheme = theme.type === 'video'
+  const currentVideo = isVideoTheme ? (theme.videos.find((v) => v.id === selectedVideo) || theme.videos[0]) : null
+  const embedUrl = currentVideo ? getYouTubeEmbedUrl(currentVideo.url) : null
 
   return (
-    <div className="atmosphere" aria-hidden="true">
-      {/* YouTube Video Background */}
-      <div className="atmosphere__video-container">
-        <iframe
-          key={currentVideo.url}
-          className="atmosphere__video"
-          src={embedUrl}
-          title="Ambient video"
-          allow="autoplay; encrypted-media"
-          allowFullScreen
-        />
-        <div className="atmosphere__overlay" />
-      </div>
+    <div className={`atmosphere atmosphere--${isVideoTheme ? 'video' : theme.id}`} aria-hidden="true">
+      {/* YouTube Video Background (only for video themes) */}
+      {isVideoTheme && embedUrl && (
+        <div className="atmosphere__video-container">
+          <iframe
+            key={currentVideo.url}
+            className="atmosphere__video"
+            src={embedUrl}
+            title="Ambient video"
+            allow="autoplay; encrypted-media"
+            allowFullScreen
+          />
+          <div className="atmosphere__overlay" />
+        </div>
+      )}
+
+      {/* Gradient Background (only for aesthetic themes) */}
+      {!isVideoTheme && (
+        <>
+          <div className="atmosphere__blob atmosphere__blob--a" />
+          <div className="atmosphere__blob atmosphere__blob--b" />
+          <div className="atmosphere__blob atmosphere__blob--c" />
+          <div className="atmosphere__grain" />
+          <div className="atmosphere__vignette" />
+        </>
+      )}
 
       {/* Theme & Video Switcher */}
       <div className="atmosphere__controls">
-        <div className="atmosphere__theme-picker">
-          {THEMES.map((t) => (
+        {/* Aesthetic Theme Picker */}
+        <div className="atmosphere__aesthetic-picker">
+          {AESTHETIC_THEMES.map((t) => (
             <button
               key={t.id}
-              className={`atmosphere__theme-btn ${t.id === themeId ? 'atmosphere__theme-btn--active' : ''}`}
+              className={`atmosphere__aesthetic-btn atmosphere__aesthetic-btn--${t.id} ${t.id === themeId ? 'atmosphere__aesthetic-btn--active' : ''}`}
+              onClick={() => onThemeChange(t.id)}
+              title={t.label}
+            />
+          ))}
+        </div>
+
+        {/* Video Theme Picker */}
+        <div className="atmosphere__video-theme-picker">
+          {VIDEO_THEMES.map((t) => (
+            <button
+              key={t.id}
+              className={`atmosphere__video-theme-btn ${t.id === themeId ? 'atmosphere__video-theme-btn--active' : ''}`}
               onClick={() => onThemeChange(t.id)}
               title={t.label}
             >
@@ -40,8 +67,8 @@ export default function Atmosphere({ themeId, onThemeChange, onVideoChange, sele
           ))}
         </div>
 
-        {/* Video Selector (if theme has multiple videos) */}
-        {theme.videos.length > 1 && (
+        {/* Video Selector (if video theme with multiple videos) */}
+        {isVideoTheme && theme.videos.length > 1 && (
           <div className="atmosphere__video-picker">
             {theme.videos.map((v) => (
               <button
@@ -55,14 +82,16 @@ export default function Atmosphere({ themeId, onThemeChange, onVideoChange, sele
           </div>
         )}
 
-        {/* Mute Button */}
-        <button
-          className={`atmosphere__mute-btn ${isMuted ? 'atmosphere__mute-btn--muted' : ''}`}
-          onClick={onMuteToggle}
-          title={isMuted ? 'Unmute' : 'Mute'}
-        >
-          {isMuted ? '🔇' : '🔊'}
-        </button>
+        {/* Mute Button (only for video themes) */}
+        {isVideoTheme && (
+          <button
+            className={`atmosphere__mute-btn ${isMuted ? 'atmosphere__mute-btn--muted' : ''}`}
+            onClick={onMuteToggle}
+            title={isMuted ? 'Unmute' : 'Mute'}
+          >
+            {isMuted ? '🔇' : '🔊'}
+          </button>
+        )}
       </div>
     </div>
   )
