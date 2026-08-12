@@ -3,103 +3,153 @@
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  transition: background 1.2s ease;
+  background: #0a0910;
 }
 
-.atmosphere__blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(70px);
-  opacity: 0.55;
-  will-change: transform;
-}
-
-.atmosphere__blob--a { width: 46vw; height: 46vw; top: -10%; left: -8%; animation: drift-a 34s ease-in-out infinite; }
-.atmosphere__blob--b { width: 38vw; height: 38vw; bottom: -12%; right: -6%; animation: drift-b 28s ease-in-out infinite; }
-.atmosphere__blob--c { width: 30vw; height: 30vw; top: 40%; left: 55%; animation: drift-c 40s ease-in-out infinite; }
-
-@keyframes drift-a {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(6vw, 8vh) scale(1.15); }
-}
-@keyframes drift-b {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-7vw, -6vh) scale(1.1); }
-}
-@keyframes drift-c {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-4vw, 5vh) scale(0.9); }
-}
-
-/* --- Ember: deep plum base, brass + terracotta glow --- */
-.atmosphere--ember { background: radial-gradient(120% 100% at 20% 0%, #2a2145 0%, #14121f 60%); }
-.atmosphere--ember .atmosphere__blob--a { background: #d8a657; }
-.atmosphere--ember .atmosphere__blob--b { background: #e2725b; }
-.atmosphere--ember .atmosphere__blob--c { background: #6b4b8a; }
-
-/* --- Aurora: indigo base, green/violet bands --- */
-.atmosphere--aurora { background: radial-gradient(120% 100% at 50% 0%, #131a33 0%, #0d0f1e 60%); }
-.atmosphere--aurora .atmosphere__blob--a { background: #4fd3a4; }
-.atmosphere--aurora .atmosphere__blob--b { background: #7a63e0; }
-.atmosphere--aurora .atmosphere__blob--c { background: #3aa0c9; }
-
-/* --- Tide: navy base with animated caustic waves --- */
-.atmosphere--tide { background: radial-gradient(120% 100% at 50% 100%, #0e2a3a 0%, #081722 60%); }
-.atmosphere--tide .atmosphere__blob--a { background: #2f8f9e; }
-.atmosphere--tide .atmosphere__blob--b { background: #1c5c78; }
-.atmosphere--tide .atmosphere__blob--c { background: #59c3c9; }
-.atmosphere__waves { position: absolute; inset: 0; opacity: 0.18; }
-.wave {
-  position: absolute;
-  left: -20%;
-  width: 140%;
-  height: 200px;
-  border-radius: 45%;
-  background: #7fd8dd;
-  opacity: 0.5;
-}
-.wave--1 { bottom: -8%; animation: wave-move 18s linear infinite; }
-.wave--2 { bottom: -14%; animation: wave-move 26s linear infinite reverse; opacity: 0.35; }
-.wave--3 { bottom: -20%; animation: wave-move 32s linear infinite; opacity: 0.25; }
-@keyframes wave-move {
-  0% { transform: translateX(0) scaleY(1); }
-  50% { transform: translateX(-6%) scaleY(1.2); }
-  100% { transform: translateX(0) scaleY(1); }
-}
-
-/* --- Grove: near-black green, dappled gold light --- */
-.atmosphere--grove { background: radial-gradient(120% 100% at 30% 0%, #16281c 0%, #0f1712 60%); }
-.atmosphere--grove .atmosphere__blob--a { background: #e8c98a; opacity: 0.35; }
-.atmosphere--grove .atmosphere__blob--b { background: #3f6b4a; }
-.atmosphere--grove .atmosphere__blob--c { background: #6f8f5a; }
-
-/* --- Midnight: near-black with twinkling stars --- */
-.atmosphere--midnight { background: radial-gradient(120% 100% at 50% 0%, #171735 0%, #08070f 60%); }
-.atmosphere--midnight .atmosphere__blob--a { background: #3a3a6b; opacity: 0.35; }
-.atmosphere--midnight .atmosphere__blob--b { background: #514a7a; opacity: 0.3; }
-.atmosphere--midnight .atmosphere__blob--c { background: #262450; opacity: 0.3; }
-.star {
-  position: absolute;
-  background: #f2efe9;
-  border-radius: 50%;
-  animation: twinkle 4s ease-in-out infinite;
-}
-@keyframes twinkle {
-  0%, 100% { opacity: 0.15; }
-  50% { opacity: 0.9; }
-}
-
-.atmosphere__grain {
-  position: absolute;
+.atmosphere__video-container {
+  position: fixed;
   inset: 0;
-  opacity: 0.04;
-  background-image: radial-gradient(circle, #fff 1px, transparent 1px);
-  background-size: 3px 3px;
-  mix-blend-mode: overlay;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
-.atmosphere__vignette {
-  position: absolute;
+.atmosphere__video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  border: none;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.atmosphere__overlay {
+  position: fixed;
   inset: 0;
-  background: radial-gradient(120% 90% at 50% 40%, transparent 40%, rgba(10, 9, 16, 0.55) 100%);
+  background: radial-gradient(120% 90% at 50% 40%, transparent 40%, rgba(10, 9, 16, 0.4) 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Controls */
+.atmosphere__controls {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 15;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.atmosphere__theme-picker {
+  display: flex;
+  gap: 6px;
+  background: rgba(33, 29, 56, 0.8);
+  backdrop-filter: blur(12px);
+  padding: 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.atmosphere__theme-btn {
+  background: transparent;
+  border: none;
+  color: var(--paper-muted);
+  font-size: 11px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-body);
+  font-weight: 500;
+}
+
+.atmosphere__theme-btn:hover {
+  color: var(--paper);
+}
+
+.atmosphere__theme-btn--active {
+  background: var(--brass);
+  color: var(--ink);
+}
+
+.atmosphere__video-picker {
+  display: flex;
+  gap: 6px;
+  background: rgba(33, 29, 56, 0.8);
+  backdrop-filter: blur(12px);
+  padding: 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.atmosphere__video-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--paper-muted);
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 28px;
+}
+
+.atmosphere__video-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--paper);
+}
+
+.atmosphere__video-btn--active {
+  background: var(--brass);
+  color: var(--ink);
+  border-color: var(--brass);
+}
+
+.atmosphere__mute-btn {
+  background: rgba(33, 29, 56, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--paper);
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.atmosphere__mute-btn:hover {
+  background: rgba(33, 29, 56, 0.95);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.atmosphere__mute-btn--muted {
+  opacity: 0.6;
+}
+
+@media (max-width: 480px) {
+  .atmosphere__controls {
+    bottom: 12px;
+    left: 12px;
+    gap: 8px;
+  }
+
+  .atmosphere__theme-btn {
+    font-size: 10px;
+    padding: 5px 10px;
+  }
+
+  .atmosphere__mute-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
 }

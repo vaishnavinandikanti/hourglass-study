@@ -1,77 +1,97 @@
-import React, { useState, useMemo } from 'react'
-import { THEMES } from '../themes.js'
-import './SpotifyPanel.css'
-
-function parseSpotifyUrl(raw) {
-  try {
-    const url = new URL(raw.trim())
-    if (!url.hostname.includes('spotify.com')) return null
-    const parts = url.pathname.split('/').filter(Boolean)
-    const type = parts.find((p) => ['playlist', 'track', 'album', 'artist', 'show', 'episode'].includes(p))
-    const idx = parts.indexOf(type)
-    const id = parts[idx + 1]
-    if (!type || !id) return null
-    return { type, id }
-  } catch {
-    return null
-  }
+.spotify-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  background: rgba(33, 29, 56, 0.85);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 14px;
+  z-index: 20;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
 }
 
-export default function SpotifyPanel({ themeId }) {
-  const [collapsed, setCollapsed] = useState(false)
-  const [customUrl, setCustomUrl] = useState('')
-  const [error, setError] = useState('')
+.spotify-panel--collapsed {
+  width: auto;
+  padding: 10px 16px;
+}
 
-  const currentTheme = useMemo(() => THEMES.find((t) => t.id === themeId), [themeId])
-  const playlistId = useMemo(() => currentTheme?.spotifyPlaylistId, [currentTheme])
+.spotify-panel__toggle {
+  background: transparent;
+  border: none;
+  color: var(--paper-muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  justify-content: space-between;
+}
 
-  const handleCustomSubmit = (e) => {
-    e.preventDefault()
-    const parsed = parseSpotifyUrl(customUrl)
-    if (!parsed) {
-      setError('Paste a link like open.spotify.com/playlist/...')
-      return
-    }
-    setError('')
-    setCustomUrl('')
-  }
+.spotify-panel--collapsed .spotify-panel__toggle {
+  justify-content: flex-start;
+}
 
-  if (!playlistId) return null
+.spotify-panel__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sage);
+  box-shadow: 0 0 8px var(--sage);
+}
 
-  return (
-    <div className={`spotify-panel ${collapsed ? 'spotify-panel--collapsed' : ''}`}>
-      <button className="spotify-panel__toggle" onClick={() => setCollapsed((c) => !c)}>
-        <span className="spotify-panel__dot" />
-        {collapsed ? `♫ ${currentTheme?.label || 'Music'}` : 'Hide'}
-      </button>
+.spotify-panel__body {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
-      {!collapsed && (
-        <div className="spotify-panel__body">
-          <p className="spotify-panel__theme-label">🎵 {currentTheme?.label} Playlist</p>
+.spotify-panel__theme-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--paper-muted);
+  margin: 0 0 5px 0;
+  text-align: center;
+}
 
-          <iframe
-            key={playlistId}
-            title={`${currentTheme?.label} Spotify Playlist`}
-            src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0`}
-            width="100%"
-            height="152"
-            frameBorder="0"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"
-          />
+.spotify-panel__body iframe {
+  border-radius: 10px;
+}
 
-          <form className="spotify-panel__custom" onSubmit={handleCustomSubmit}>
-            <input
-              type="text"
-              placeholder="Or paste any Spotify link"
-              value={customUrl}
-              onChange={(e) => setCustomUrl(e.target.value)}
-            />
-            <button type="submit">Load</button>
-          </form>
-          {error && <p className="spotify-panel__error">{error}</p>}
-        </div>
-      )}
-    </div>
-  )
+.spotify-panel__custom {
+  display: flex;
+  gap: 6px;
+}
+
+.spotify-panel__custom input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: var(--paper);
+  font-size: 11px;
+  padding: 7px 9px;
+  min-width: 0;
+}
+
+.spotify-panel__custom button {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--paper);
+  font-size: 11px;
+  padding: 0 12px;
+  border-radius: 8px;
+}
+
+.spotify-panel__error {
+  font-size: 11px;
+  color: var(--ember);
+  margin: 0;
+}
+
+@media (max-width: 480px) {
+  .spotify-panel { right: 12px; left: 12px; width: auto; bottom: 12px; }
 }
