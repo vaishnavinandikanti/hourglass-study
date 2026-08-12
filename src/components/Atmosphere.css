@@ -3,6 +3,81 @@
   inset: 0;
   z-index: 0;
   overflow: hidden;
+}
+
+/* Gradient Themes */
+.atmosphere--ember { background: radial-gradient(120% 100% at 20% 0%, #2a2145 0%, #14121f 60%); }
+.atmosphere--ember .atmosphere__blob--a { background: #d8a657; }
+.atmosphere--ember .atmosphere__blob--b { background: #e2725b; }
+.atmosphere--ember .atmosphere__blob--c { background: #6b4b8a; }
+
+.atmosphere--aurora { background: radial-gradient(120% 100% at 50% 0%, #131a33 0%, #0d0f1e 60%); }
+.atmosphere--aurora .atmosphere__blob--a { background: #4fd3a4; }
+.atmosphere--aurora .atmosphere__blob--b { background: #7a63e0; }
+.atmosphere--aurora .atmosphere__blob--c { background: #3aa0c9; }
+
+.atmosphere--tide { background: radial-gradient(120% 100% at 50% 100%, #0e2a3a 0%, #081722 60%); }
+.atmosphere--tide .atmosphere__blob--a { background: #2f8f9e; }
+.atmosphere--tide .atmosphere__blob--b { background: #1c5c78; }
+.atmosphere--tide .atmosphere__blob--c { background: #59c3c9; }
+
+.atmosphere--grove { background: radial-gradient(120% 100% at 30% 0%, #16281c 0%, #0f1712 60%); }
+.atmosphere--grove .atmosphere__blob--a { background: #e8c98a; opacity: 0.35; }
+.atmosphere--grove .atmosphere__blob--b { background: #3f6b4a; }
+.atmosphere--grove .atmosphere__blob--c { background: #6f8f5a; }
+
+.atmosphere--midnight { background: radial-gradient(120% 100% at 50% 0%, #171735 0%, #08070f 60%); }
+.atmosphere--midnight .atmosphere__blob--a { background: #3a3a6b; opacity: 0.35; }
+.atmosphere--midnight .atmosphere__blob--b { background: #514a7a; opacity: 0.3; }
+.atmosphere--midnight .atmosphere__blob--c { background: #262450; opacity: 0.3; }
+
+.atmosphere__blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.55;
+  will-change: transform;
+  z-index: 1;
+}
+
+.atmosphere__blob--a { width: 46vw; height: 46vw; top: -10%; left: -8%; animation: drift-a 34s ease-in-out infinite; }
+.atmosphere__blob--b { width: 38vw; height: 38vw; bottom: -12%; right: -6%; animation: drift-b 28s ease-in-out infinite; }
+.atmosphere__blob--c { width: 30vw; height: 30vw; top: 40%; left: 55%; animation: drift-c 40s ease-in-out infinite; }
+
+@keyframes drift-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(6vw, 8vh) scale(1.15); }
+}
+@keyframes drift-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-7vw, -6vh) scale(1.1); }
+}
+@keyframes drift-c {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-4vw, 5vh) scale(0.9); }
+}
+
+.atmosphere__grain {
+  position: fixed;
+  inset: 0;
+  opacity: 0.04;
+  background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+  background-size: 3px 3px;
+  mix-blend-mode: overlay;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.atmosphere__vignette {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(120% 90% at 50% 40%, transparent 40%, rgba(10, 9, 16, 0.55) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Video Theme Styles */
+.atmosphere--video {
   background: #0a0910;
 }
 
@@ -40,14 +115,15 @@
   left: 20px;
   z-index: 15;
   display: flex;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
   align-items: center;
 }
 
-.atmosphere__theme-picker {
+/* Aesthetic Theme Swatches */
+.atmosphere__aesthetic-picker {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   background: rgba(33, 29, 56, 0.8);
   backdrop-filter: blur(12px);
   padding: 8px;
@@ -55,7 +131,41 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.atmosphere__theme-btn {
+.atmosphere__aesthetic-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.atmosphere__aesthetic-btn:hover { transform: scale(1.1); }
+
+.atmosphere__aesthetic-btn--active {
+  border-color: var(--paper);
+}
+
+.atmosphere__aesthetic-btn--ember { background: linear-gradient(135deg, #d8a657, #e2725b); }
+.atmosphere__aesthetic-btn--aurora { background: linear-gradient(135deg, #4fd3a4, #7a63e0); }
+.atmosphere__aesthetic-btn--tide { background: linear-gradient(135deg, #2f8f9e, #0e2a3a); }
+.atmosphere__aesthetic-btn--grove { background: linear-gradient(135deg, #e8c98a, #3f6b4a); }
+.atmosphere__aesthetic-btn--midnight { background: linear-gradient(135deg, #3a3a6b, #08070f); }
+
+/* Video Theme Picker */
+.atmosphere__video-theme-picker {
+  display: flex;
+  gap: 6px;
+  background: rgba(33, 29, 56, 0.8);
+  backdrop-filter: blur(12px);
+  padding: 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  flex-wrap: wrap;
+  max-width: 500px;
+}
+
+.atmosphere__video-theme-btn {
   background: transparent;
   border: none;
   color: var(--paper-muted);
@@ -68,15 +178,16 @@
   font-weight: 500;
 }
 
-.atmosphere__theme-btn:hover {
+.atmosphere__video-theme-btn:hover {
   color: var(--paper);
 }
 
-.atmosphere__theme-btn--active {
+.atmosphere__video-theme-btn--active {
   background: var(--brass);
   color: var(--ink);
 }
 
+/* Video Selector */
 .atmosphere__video-picker {
   display: flex;
   gap: 6px;
@@ -110,6 +221,7 @@
   border-color: var(--brass);
 }
 
+/* Mute Button */
 .atmosphere__mute-btn {
   background: rgba(33, 29, 56, 0.8);
   backdrop-filter: blur(12px);
@@ -142,7 +254,12 @@
     gap: 8px;
   }
 
-  .atmosphere__theme-btn {
+  .atmosphere__aesthetic-btn {
+    width: 24px;
+    height: 24px;
+  }
+
+  .atmosphere__video-theme-btn {
     font-size: 10px;
     padding: 5px 10px;
   }

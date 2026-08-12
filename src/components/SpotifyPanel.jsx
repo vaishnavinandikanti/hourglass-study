@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { THEMES } from '../themes.js'
+import { AESTHETIC_THEMES, ALL_THEMES } from '../themes.js'
 import './SpotifyPanel.css'
 
 function parseSpotifyUrl(raw) {
@@ -22,8 +22,9 @@ export default function SpotifyPanel({ themeId }) {
   const [customUrl, setCustomUrl] = useState('')
   const [error, setError] = useState('')
 
-  const currentTheme = useMemo(() => THEMES.find((t) => t.id === themeId), [themeId])
-  const playlistId = useMemo(() => currentTheme?.spotifyPlaylistId, [currentTheme])
+  const currentTheme = useMemo(() => ALL_THEMES.find((t) => t.id === themeId), [themeId])
+  const isAestheticTheme = currentTheme?.type === 'gradient'
+  const playlistId = useMemo(() => (isAestheticTheme ? currentTheme?.spotifyPlaylistId : null), [currentTheme, isAestheticTheme])
 
   const handleCustomSubmit = (e) => {
     e.preventDefault()
@@ -36,6 +37,7 @@ export default function SpotifyPanel({ themeId }) {
     setCustomUrl('')
   }
 
+  // Don't show Spotify panel for video themes
   if (!playlistId) return null
 
   return (
