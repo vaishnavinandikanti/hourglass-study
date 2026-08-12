@@ -99,8 +99,9 @@ export const VIDEO_THEMES = [
 
 export const ALL_THEMES = [...AESTHETIC_THEMES, ...VIDEO_THEMES]
 
-export function getYouTubeEmbedUrl(url) {
+export function getYouTubeEmbedUrl(url, isMuted = false) {
   const videoId = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([^&\n?#]+)/)?.[1]
   if (!videoId) return null
-  return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&modestbranding=1&loop=1&playlist=${videoId}`
+  // mute=0 allows sound to play, mute=1 silences it
+  return `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&modestbranding=1&loop=1&playlist=${videoId}&mute=${isMuted ? 1 : 0}`
 }
