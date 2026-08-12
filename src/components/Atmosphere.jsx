@@ -1,63 +1,69 @@
-import React, { useMemo } from 'react'
+import React, { useState } from 'react'
+import { THEMES, getYouTubeEmbedUrl } from '../themes.js'
 import './Atmosphere.css'
 
-export const ATMOSPHERES = [
-  { id: 'ember', label: 'Ember' },
-  { id: 'aurora', label: 'Aurora' },
-  { id: 'tide', label: 'Tide' },
-  { id: 'grove', label: 'Grove' },
-  { id: 'midnight', label: 'Midnight' },
-]
+export default function Atmosphere({ themeId, onThemeChange, onVideoChange, selectedVideo, isMuted, onMuteToggle }) {
+  const theme = THEMES.find((t) => t.id === themeId)
+  
+  if (!theme) return null
 
-// Deterministic pseudo-random star positions so they don't reshuffle on re-render
-function useStars(count) {
-  return useMemo(() => {
-    let seed = 42
-    const rand = () => {
-      seed = (seed * 9301 + 49297) % 233280
-      return seed / 233280
-    }
-    return Array.from({ length: count }, (_, i) => ({
-      id: i,
-      top: rand() * 100,
-      left: rand() * 100,
-      delay: rand() * 6,
-      size: rand() > 0.85 ? 2 : 1,
-    }))
-  }, [count])
-}
-
-export default function Atmosphere({ theme }) {
-  const stars = useStars(theme === 'midnight' ? 80 : 0)
+  const currentVideo = theme.videos.find((v) => v.id === selectedVideo) || theme.videos[0]
+  const embedUrl = getYouTubeEmbedUrl(currentVideo.url)
 
   return (
-    <div className={`atmosphere atmosphere--${theme}`} aria-hidden="true">
-      <div className="atmosphere__blob atmosphere__blob--a" />
-      <div className="atmosphere__blob atmosphere__blob--b" />
-      <div className="atmosphere__blob atmosphere__blob--c" />
-      {theme === 'tide' && (
-        <div className="atmosphere__waves">
-          <span className="wave wave--1" />
-          <span className="wave wave--2" />
-          <span className="wave wave--3" />
+    <div className="atmosphere" aria-hidden="true">
+      {/* YouTube Video Background */}
+      <div className="atmosphere__video-container">
+        <iframe
+          key={currentVideo.url}
+          className="atmosphere__video"
+          src={embedUrl}
+          title="Ambient video"
+          allow="autoplay; encrypted-media"
+          allowFullScreen
+        />
+        <div className="atmosphere__overlay" />
+      </div>
+
+      {/* Theme & Video Switcher */}
+      <div className="atmosphere__controls">
+        <div className="atmosphere__theme-picker">
+          {THEMES.map((t) => (
+            <button
+              key={t.id}
+              className={`atmosphere__theme-btn ${t.id === themeId ? 'atmosphere__theme-btn--active' : ''}`}
+              onClick={() => onThemeChange(t.id)}
+              title={t.label}
+            >
+              {t.label}
+            </button>
+          ))}
         </div>
-      )}
-      {theme === 'midnight' &&
-        stars.map((s) => (
-          <span
-            key={s.id}
-            className="star"
-            style={{
-              top: `${s.top}%`,
-              left: `${s.left}%`,
-              width: s.size,
-              height: s.size,
-              animationDelay: `${s.delay}s`,
-            }}
-          />
-        ))}
-      <div className="atmosphere__grain" />
-      <div className="atmosphere__vignette" />
+
+        {/* Video Selector (if theme has multiple videos) */}
+        {theme.videos.length > 1 && (
+          <div className="atmosphere__video-picker">
+            {theme.videos.map((v) => (
+              <button
+                key={v.id}
+                className={`atmosphere__video-btn ${v.id === selectedVideo ? 'atmosphere__video-btn--active' : ''}`}
+                onClick={() => onVideoChange(v.id)}
+              >
+                {v.id}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Mute Button */}
+        <button
+          className={`atmosphere__mute-btn ${isMuted ? 'atmosphere__mute-btn--muted' : ''}`}
+          onClick={onMuteToggle}
+          title={isMuted ? 'Unmute' : 'Mute'}
+        >
+          {isMuted ? '🔇' : '🔊'}
+        </button>
+      </div>
     </div>
   )
 }

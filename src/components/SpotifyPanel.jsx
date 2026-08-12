@@ -1,17 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
+import { THEMES } from '../themes.js'
 import './SpotifyPanel.css'
-
-const PRESETS = [
-  { label: 'Lo-Fi Beats', id: '37i9dQZF1DWWQRwui0ExPn', type: 'playlist' },
-  { label: 'Deep Focus', id: '37i9dQZF1DWZeKCadgRdKQ', type: 'playlist' },
-  { label: 'Peaceful Piano', id: '37i9dQZF1DX4sWSpwq3LiO', type: 'playlist' },
-]
 
 function parseSpotifyUrl(raw) {
   try {
     const url = new URL(raw.trim())
     if (!url.hostname.includes('spotify.com')) return null
-    const parts = url.pathname.split('/').filter(Boolean) // [type, id] (ignore intl prefixes)
+    const parts = url.pathname.split('/').filter(Boolean)
     const type = parts.find((p) => ['playlist', 'track', 'album', 'artist', 'show', 'episode'].includes(p))
     const idx = parts.indexOf(type)
     const id = parts[idx + 1]
@@ -22,17 +17,13 @@ function parseSpotifyUrl(raw) {
   }
 }
 
-export default function SpotifyPanel() {
+export default function SpotifyPanel({ themeId }) {
   const [collapsed, setCollapsed] = useState(false)
-  const [active, setActive] = useState(PRESETS[0])
   const [customUrl, setCustomUrl] = useState('')
   const [error, setError] = useState('')
 
-  const handlePreset = (preset) => {
-    setActive(preset)
-    setError('')
-    setCustomUrl('')
-  }
+  const currentTheme = useMemo(() => THEMES.find((t) => t.id === themeId), [themeId])
+  const playlistId = useMemo(() => currentTheme?.spotifyPlaylistId, [currentTheme])
 
   const handleCustomSubmit = (e) => {
     e.preventDefault()
@@ -42,34 +33,26 @@ export default function SpotifyPanel() {
       return
     }
     setError('')
-    setActive({ label: 'Your link', ...parsed })
+    setCustomUrl('')
   }
+
+  if (!playlistId) return null
 
   return (
     <div className={`spotify-panel ${collapsed ? 'spotify-panel--collapsed' : ''}`}>
       <button className="spotify-panel__toggle" onClick={() => setCollapsed((c) => !c)}>
         <span className="spotify-panel__dot" />
-        {collapsed ? 'Now playing' : 'Hide'}
+        {collapsed ? `♫ ${currentTheme?.label || 'Music'}` : 'Hide'}
       </button>
 
       {!collapsed && (
         <div className="spotify-panel__body">
-          <div className="spotify-panel__presets">
-            {PRESETS.map((p) => (
-              <button
-                key={p.id}
-                className={`spotify-panel__chip ${active.id === p.id ? 'spotify-panel__chip--active' : ''}`}
-                onClick={() => handlePreset(p)}
-              >
-                {p.label}
-              </button>
-            ))}
-          </div>
+          <p className="spotify-panel__theme-label">🎵 {currentTheme?.label} Playlist</p>
 
           <iframe
-            key={`${active.type}-${active.id}`}
-            title="Spotify player"
-            src={`https://open.spotify.com/embed/${active.type}/${active.id}?utm_source=generator&theme=0`}
+            key={playlistId}
+            title={`${currentTheme?.label} Spotify Playlist`}
+            src={`https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0`}
             width="100%"
             height="152"
             frameBorder="0"
@@ -80,7 +63,7 @@ export default function SpotifyPanel() {
           <form className="spotify-panel__custom" onSubmit={handleCustomSubmit}>
             <input
               type="text"
-              placeholder="Paste any Spotify playlist/track link"
+              placeholder="Or paste any Spotify link"
               value={customUrl}
               onChange={(e) => setCustomUrl(e.target.value)}
             />

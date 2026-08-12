@@ -8,7 +8,9 @@ import { TECHNIQUES } from './techniques.js'
 import './App.css'
 
 export default function App() {
-  const [theme, setTheme] = useState('ember')
+  const [themeId, setThemeId] = useState('cafe')
+  const [selectedVideo, setSelectedVideo] = useState(1)
+  const [isMuted, setIsMuted] = useState(false)
   const [techniqueId, setTechniqueId] = useState('pomodoro')
   const [customWork, setCustomWork] = useState(30)
   const [customBreak, setCustomBreak] = useState(5)
@@ -17,11 +19,18 @@ export default function App() {
 
   return (
     <div className="app">
-      <Atmosphere theme={theme} />
+      <Atmosphere
+        themeId={themeId}
+        onThemeChange={setThemeId}
+        selectedVideo={selectedVideo}
+        onVideoChange={setSelectedVideo}
+        isMuted={isMuted}
+        onMuteToggle={() => setIsMuted((m) => !m)}
+      />
 
       <header className="app__header">
         <span className="app__mark">⏳ Hourglass</span>
-        <AtmospherePicker theme={theme} onChange={setTheme} />
+        <AtmospherePicker themeId={themeId} onChange={setThemeId} />
       </header>
 
       <main className="app__main">
@@ -36,7 +45,7 @@ export default function App() {
         />
       </main>
 
-      <SpotifyPanel />
+      <SpotifyPanel themeId={themeId} />
     </div>
   )
 }
