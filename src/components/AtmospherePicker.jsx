@@ -1,21 +1,21 @@
 import React from 'react'
-import { ATMOSPHERES } from './Atmosphere.jsx'
+import { THEMES } from '../themes.js'
 import './AtmospherePicker.css'
 
-export default function AtmospherePicker({ theme, onChange }) {
+export default function AtmospherePicker({ themeId, onChange }) {
   return (
-    <div className="atmo-picker" role="group" aria-label="Background atmosphere">
-      {ATMOSPHERES.map((a) => (
+    <div className="atmo-picker" role="group" aria-label="Background themes">
+      {THEMES.map((t) => (
         <button
-          key={a.id}
-          className={`atmo-picker__swatch atmo-picker__swatch--${a.id} ${
-            a.id === theme ? 'atmo-picker__swatch--active' : ''
+          key={t.id}
+          className={`atmo-picker__swatch atmo-picker__swatch--${t.id} ${
+            t.id === themeId ? 'atmo-picker__swatch--active' : ''
           }`}
-          onClick={() => onChange(a.id)}
-          aria-pressed={a.id === theme}
-          title={a.label}
+          onClick={() => onChange(t.id)}
+          aria-pressed={t.id === themeId}
+          title={t.label}
         >
-          <span className="atmo-picker__label">{a.label}</span>
+          <span className="atmo-picker__label">{t.label}</span>
         </button>
       ))}
     </div>
